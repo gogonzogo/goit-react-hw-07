@@ -11,13 +11,12 @@ export const ContactList = () => {
   const [editableContactId, setEditableContactId] = useState(null);
   const editedContactsRef = useRef({});
   const dispatch = useDispatch();
-  const {items, isLoading} = useSelector(state => state.contacts);
+  const {items} = useSelector(state => state.contacts);
   const filter = useSelector(state => state.filter);
   const sortOptions = useSelector(state => state.sortOptions);
   const sortedContacts = sortContactsList(items, sortOptions);
   const filteredContacts = filterContactsList(sortedContacts, filter);
 
-  console.log(isLoading)
   const handleEditClick = id => {
     setEditableContactId(id);
     editedContactsRef.current[id] = {
@@ -43,7 +42,7 @@ export const ContactList = () => {
     editedContactsRef.current[id][dataset] = sanitizedValue;
   };
 
-  return !isLoading ? ( 
+  return ( 
     <section className={css.contactsListSection}>
       <table className={css.contactsTable}>
         <thead>
@@ -112,7 +111,5 @@ export const ContactList = () => {
         </tbody>
       </table>
     </section>
-  ) : (
-      <h1>Loading...</h1>
   );
 };
