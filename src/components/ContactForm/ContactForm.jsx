@@ -1,26 +1,35 @@
 import css from './ContactForm.module.css';
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { createContact } from 'redux/operations';
 
 export const ContactForm = () => {
   const [state, setState] = useState({
     name: '',
-    number: '',
+    phone: '',
   });
   const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.items);
 
   const handleSubmit = e => {
     e.preventDefault();
-    const { name, number } = state;
+    const { name, phone } = state;
     const newContact = {
-      id: nanoid(),
       name,
-      number,
+      phone,
     };
-    dispatch(addContact(newContact));
-    setState({ name: '', number: '' });
+    const existingContact = contacts.find(
+      contact =>
+        contact.name.toLowerCase() === name.toLowerCase() ||
+        contact.phone === phone
+    );
+    if (existingContact) {
+      alert(`${name} or ${phone} is already in contacts`);
+      return;
+    }
+
+    dispatch(createContact(newContact));
+    setState({ name: '', phone: '' });
   };
 
   const onChange = e => {
@@ -28,7 +37,7 @@ export const ContactForm = () => {
       .split(' ')
       .map(str => str.trim())
       .join(' ');
-    
+
     setState(prevState => ({
       ...prevState,
       [e.target.name]: trimmedValue,
@@ -56,9 +65,9 @@ export const ContactForm = () => {
           <input
             className={(css.inputNum, css.formInput)}
             onChange={onChange}
-            value={state.number}
+            value={state.phone}
             type="tel"
-            name="number"
+            name="phone"
             pattern="^\+?\d{1,4}[-.\s]?\(?\d{1,3}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required

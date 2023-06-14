@@ -1,6 +1,6 @@
 import css from './Buttons.module.css';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/contactsSlice';
+import { removeContact } from 'redux/operations';
 
 export const Buttons = ({
   editableContactId,
@@ -35,7 +35,7 @@ export const Buttons = ({
           </button>
           <button
             className={css.contactItemBtn}
-            onClick={() => dispatch(deleteContact(contactId))}
+            onClick={() => dispatch(removeContact(contactId))}
           >
             Delete
           </button>

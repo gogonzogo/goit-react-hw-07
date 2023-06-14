@@ -3,7 +3,7 @@ import ContentEditable from 'react-contenteditable';
 // import sanitize from 'sanitize-html';
 import { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { editContact } from 'redux/contactsSlice';
+import { updateContact } from 'redux/operations';
 import { sortContactsList, filterContactsList } from 'services/contactListFunc';
 import { Buttons } from 'components/Buttons/Buttons';
 
@@ -11,17 +11,17 @@ export const ContactList = () => {
   const [editableContactId, setEditableContactId] = useState(null);
   const editedContactsRef = useRef({});
   const dispatch = useDispatch();
-  const contactsObject = useSelector(state => state.contacts);
-  const contacts = contactsObject.items;
+  const {items, isLoading} = useSelector(state => state.contacts);
   const filter = useSelector(state => state.filter);
   const sortOptions = useSelector(state => state.sortOptions);
-  const sortedContacts = sortContactsList(contacts, sortOptions);
+  const sortedContacts = sortContactsList(items, sortOptions);
   const filteredContacts = filterContactsList(sortedContacts, filter);
 
+  console.log(isLoading)
   const handleEditClick = id => {
     setEditableContactId(id);
     editedContactsRef.current[id] = {
-      ...contacts.find(contact => contact.id === id),
+      ...items.find(contact => contact.id === id),
     };
   };
 
@@ -31,7 +31,7 @@ export const ContactList = () => {
   };
 
   const handleSaveClick = id => {
-    dispatch(editContact(editedContactsRef.current[id]));
+    dispatch(updateContact({id, editedContact: editedContactsRef.current[id]}));
     setEditableContactId(null);
     editedContactsRef.current = {};
   };
@@ -43,7 +43,7 @@ export const ContactList = () => {
     editedContactsRef.current[id][dataset] = sanitizedValue;
   };
 
-  return (
+  return !isLoading ? ( 
     <section className={css.contactsListSection}>
       <table className={css.contactsTable}>
         <thead>
@@ -81,13 +81,13 @@ export const ContactList = () => {
                     {editableContactId === contact.id ? (
                       <ContentEditable
                         className={css.editableContact}
-                        html={contact.number}
+                        html={contact.phone}
                         disabled={false}
-                        data-value="number"
+                        data-value="phone"
                         onChange={e => handleContactChange(e, contact.id)}
                       />
                     ) : (
-                      contact.number
+                      contact.phone
                     )}
                   </td>
                   <td>
@@ -112,5 +112,7 @@ export const ContactList = () => {
         </tbody>
       </table>
     </section>
+  ) : (
+      <h1>Loading...</h1>
   );
 };
