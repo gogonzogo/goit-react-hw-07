@@ -1,0 +1,35 @@
+.contactsListSection {
+  margin-top: 20px;
+}
+
+.contactsList {
+  list-style: none;
+  margin-top: 15px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+}
+
+.contactItem:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.contactItem:hover {
+  background-color: lightgray;
+}
+
+.contactItemNumer {
+  margin-right: 10px;
+}
+
+.contactsTable {
+  border-spacing: 10px;
+}
+
+.editableContact {
+  border: 1px solid black;
+  padding: 5px;
+}
+
