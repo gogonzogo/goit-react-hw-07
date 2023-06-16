@@ -1,6 +1,6 @@
 import css from './ContactList.module.css';
 import ContentEditable from 'react-contenteditable';
-// import sanitize from 'sanitize-html';
+import sanitize from 'sanitize-html';
 import { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateContact } from 'redux/operations';
@@ -39,7 +39,7 @@ export const ContactList = () => {
   const handleContactChange = (e, id) => {
     const value = e.target.value;
     const dataset = e.currentTarget.dataset.value;
-    const sanitizedValue = value;
+    const sanitizedValue = sanitize(value);
     editedContactsRef.current[id][dataset] = sanitizedValue;
   };
 
