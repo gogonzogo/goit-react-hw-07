@@ -1,6 +1,6 @@
 import css from './Buttons.module.css';
 import { useDispatch } from 'react-redux';
-import { removeContact } from 'redux/operations';
+import { deleteContact } from 'redux/operations';
 
 export const Buttons = ({
   editableContactId,
@@ -9,7 +9,6 @@ export const Buttons = ({
   handleEditClick,
   handleCancelClick,
 }) => {
-  
   const dispatch = useDispatch();
   return (
     <>
@@ -35,7 +34,7 @@ export const Buttons = ({
           </button>
           <button
             className={css.contactItemBtn}
-            onClick={() => dispatch(removeContact(contactId))}
+            onClick={() => dispatch(deleteContact(contactId))}
           >
             Delete
           </button>
@@ -44,5 +43,3 @@ export const Buttons = ({
     </>
   );
 };
-
-
