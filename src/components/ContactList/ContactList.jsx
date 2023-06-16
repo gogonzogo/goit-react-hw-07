@@ -6,21 +6,22 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateContact } from 'redux/operations';
 import { sortContactsList, filterContactsList } from 'services/contactListFunc';
 import { Buttons } from 'components/Buttons/Buttons';
+import { getContacts, getFilter, getSortOptions } from 'redux/selectors';
 
 export const ContactList = () => {
   const [editableContactId, setEditableContactId] = useState(null);
   const editedContactsRef = useRef({});
   const dispatch = useDispatch();
-  const {items} = useSelector(state => state.contacts);
-  const filter = useSelector(state => state.filter);
-  const sortOptions = useSelector(state => state.sortOptions);
-  const sortedContacts = sortContactsList(items, sortOptions);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  const sortOptions = useSelector(getSortOptions);
+  const sortedContacts = sortContactsList(contacts, sortOptions);
   const filteredContacts = filterContactsList(sortedContacts, filter);
 
   const handleEditClick = id => {
     setEditableContactId(id);
     editedContactsRef.current[id] = {
-      ...items.find(contact => contact.id === id),
+      ...contacts.find(contact => contact.id === id),
     };
   };
 
